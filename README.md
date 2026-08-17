@@ -1,28 +1,3 @@
-# JetBrains Marketplace — Custom Page
-
-Use this file when publishing **Apple Container Manager** on [JetBrains Marketplace](https://plugins.jetbrains.com/).
-
----
-
-## Custom page settings
-
-| Field | Suggested value |
-|---|---|
-| **Page name** | `Overview` |
-| **Page address** | `overview` |
-
-Upload your screenshots from `screenshoot/` in the **Media** section (recommended size: 1200×760 px).
-
-Suggested tags: **Container**, **Docker**, **macOS**, **DevOps**, **Run Configuration**
-
----
-
-## Custom page content (Markdown)
-
-Copy everything below the line into the Marketplace **Custom Pages → Markdown** editor.
-
----
-
 # Apple Container Manager
 
 Manage [Apple's `container` runtime](https://github.com/apple/container) from inside IntelliJ IDEA — without leaving the IDE or switching to a generic Docker UI.

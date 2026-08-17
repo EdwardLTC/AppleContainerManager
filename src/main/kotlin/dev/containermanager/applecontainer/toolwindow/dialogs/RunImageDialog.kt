@@ -565,13 +565,11 @@ class RunImageDialog(
                         .align(AlignX.FILL)
                 }
 
-                row("Networks:") {
-                    cell(networksPanel).align(AlignX.FILL)
-                }
-
-                row("DNS servers:") {
-                    scrollCell(dnsField)
-                        .align(AlignX.FILL)
+                row {
+                    cell(JPanel(BorderLayout()).apply {
+                        add(JBLabel("Networks:"), BorderLayout.NORTH)
+                        add(networksPanel, BorderLayout.CENTER)
+                    }).align(AlignX.FILL)
                 }
             }
 

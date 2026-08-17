@@ -1,6 +1,7 @@
 package dev.containermanager.applecontainer.settings
 
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
+import com.intellij.openapi.fileChooser.FileChooserDescriptor
+import com.intellij.openapi.ui.TextBrowseFolderListener
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
 import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.components.JBLabel
@@ -14,11 +15,19 @@ import javax.swing.SpinnerNumberModel
 class AppleContainerSettingsComponent {
 
     private val cliPathField = TextFieldWithBrowseButton().apply {
+        val descriptor = FileChooserDescriptor(
+            true,  // chooseFiles
+            false, // chooseFolders
+            false, // chooseJars
+            false, // chooseJarsAsFiles
+            false, // chooseJarContents
+            false, // chooseMultiple
+        )
+            .withTitle("Select `Container` Executable")
+            .withDescription("Path to Apple's container CLI binary")
+
         addBrowseFolderListener(
-            "Select `container` Executable",
-            "Path to Apple's container CLI binary",
-            null,
-            FileChooserDescriptorFactory.createSingleFileDescriptor(),
+            TextBrowseFolderListener(descriptor, null)
         )
     }
 

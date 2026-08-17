@@ -2,6 +2,8 @@ package dev.containermanager.applecontainer.util
 
 import com.intellij.execution.RunContentExecutor
 import com.intellij.execution.process.OSProcessHandler
+import com.intellij.execution.process.ProcessEvent
+import com.intellij.execution.process.ProcessListener
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 
@@ -13,20 +15,28 @@ import com.intellij.openapi.project.Project
  */
 object ConsoleRunner {
 
-    fun runInConsole(project: Project, handler: OSProcessHandler, title: String, onTerminate: (() -> Unit)? = null) {
+    fun runInConsole(
+        project: Project,
+        handler: OSProcessHandler,
+        title: String,
+        onTerminate: (() -> Unit)? = null,
+    ) {
         ApplicationManager.getApplication().invokeLater {
             val executor = RunContentExecutor(project, handler)
                 .withTitle(title)
                 .withActivateToolWindow(true)
-                .withStop({ handler.destroyProcess() }) { !handler.isProcessTerminated }
+                .withStop({ handler.destroyProcess() }) {
+                    !handler.isProcessTerminated
+                }
 
             if (onTerminate != null) {
-                handler.addProcessListener(object : com.intellij.execution.process.ProcessAdapter() {
-                    override fun processTerminated(event: com.intellij.execution.process.ProcessEvent) {
+                handler.addProcessListener(object : ProcessListener {
+                    override fun processTerminated(event: ProcessEvent) {
                         onTerminate()
                     }
                 })
             }
+
             executor.run()
         }
     }

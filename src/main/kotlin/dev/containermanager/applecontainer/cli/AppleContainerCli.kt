@@ -14,9 +14,9 @@ package dev.containermanager.applecontainer.cli
  * implementation of the same command-family interfaces without touching services, actions, or
  * UI code, which all depend only on the domain models.
  */
-class AppleContainerCli(binaryPathProvider: () -> String?, workDirectory: String? = null) {
+class AppleContainerCli(binaryPathProvider: () -> String?) {
 
-    private val executor = CliExecutor(binaryPathProvider, workDirectory)
+    private val executor = CliExecutor(binaryPathProvider)
 
     val containers = ContainerCommands(executor)
     val images = ImageCommands(executor)

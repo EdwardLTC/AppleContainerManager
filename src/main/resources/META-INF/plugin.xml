@@ -54,12 +54,9 @@
         <action id="AppleContainerManager.Refresh"
                 class="dev.containermanager.applecontainer.actions.container.RefreshContainersAction"
                 text="Refresh" description="Refresh the container list" icon="AllIcons.Actions.Refresh"/>
-        <action id="AppleContainerManager.StartContainer"
-                class="dev.containermanager.applecontainer.actions.container.StartContainerAction"
+        <action id="AppleContainerManager.ToggleContainer"
+                class="dev.containermanager.applecontainer.actions.container.ToggleContainerAction"
                 text="Start" description="Start the selected container(s)" icon="AllIcons.Actions.Execute"/>
-        <action id="AppleContainerManager.StopContainer"
-                class="dev.containermanager.applecontainer.actions.container.StopContainerAction"
-                text="Stop" description="Stop the selected container(s)" icon="AllIcons.Actions.Pause"/>
         <action id="AppleContainerManager.KillContainer"
                 class="dev.containermanager.applecontainer.actions.container.KillContainerAction"
                 text="Kill" description="Kill the selected container(s)" icon="AllIcons.Process.Stop"/>
@@ -135,8 +132,7 @@
         <group id="AppleContainerManager.ContainersToolbar">
             <reference ref="AppleContainerManager.Refresh"/>
             <separator/>
-            <reference ref="AppleContainerManager.StartContainer"/>
-            <reference ref="AppleContainerManager.StopContainer"/>
+            <reference ref="AppleContainerManager.ToggleContainer"/>
             <reference ref="AppleContainerManager.KillContainer"/>
             <reference ref="AppleContainerManager.DeleteContainer"/>
             <separator/>

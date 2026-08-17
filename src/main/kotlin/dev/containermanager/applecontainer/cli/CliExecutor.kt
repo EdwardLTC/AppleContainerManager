@@ -3,8 +3,8 @@ package dev.containermanager.applecontainer.cli
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.execution.process.CapturingProcessHandler
 import com.intellij.execution.process.OSProcessHandler
-import com.intellij.execution.process.ProcessAdapter
 import com.intellij.execution.process.ProcessEvent
+import com.intellij.execution.process.ProcessListener
 import com.intellij.openapi.diagnostic.thisLogger
 import dev.containermanager.applecontainer.cli.model.CliException
 import dev.containermanager.applecontainer.cli.model.CliResult
@@ -13,7 +13,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 /**
  * Executes the `container` binary off the EDT and never blocks the UI thread.
@@ -27,10 +26,7 @@ import kotlin.coroutines.resumeWithException
  * class (ContainerCommands, ImageCommands, ...) is built on top of it, and it's what would be
  * swapped out (or parameterized) if this plugin ever needed to shell out differently.
  */
-class CliExecutor(
-    private val binaryPathProvider: () -> String?,
-    private val workDirectory: String? = null,
-) {
+class CliExecutor(private val binaryPathProvider: () -> String?) {
     private val logger = thisLogger()
 
     /** Runs the command to completion and captures stdout/stderr. Suspends off the EDT. */
@@ -75,21 +71,28 @@ class CliExecutor(
     }
 
     /** Await process termination as a suspend function, useful for one-shot streaming commands. */
-    suspend fun awaitCompletion(handler: OSProcessHandler): Int = suspendCancellableCoroutine { cont ->
-        handler.addProcessListener(object : ProcessAdapter() {
-            override fun processTerminated(event: ProcessEvent) {
-                if (cont.isActive) cont.resume(event.exitCode)
+    suspend fun awaitCompletion(handler: OSProcessHandler): Int =
+        suspendCancellableCoroutine { cont ->
+            handler.addProcessListener(object : ProcessListener {
+                override fun processTerminated(event: ProcessEvent) {
+                    if (cont.isActive) {
+                        cont.resume(event.exitCode)
+                    }
+                }
+            })
+
+            cont.invokeOnCancellation {
+                try {
+                    handler.destroyProcess()
+                } catch (_: Exception) {
+                    // best-effort cleanup
+                }
             }
-        })
-        cont.invokeOnCancellation {
-            try {
-                handler.destroyProcess()
-            } catch (_: Exception) {
-                // best-effort cleanup
+
+            if (!handler.isStartNotified) {
+                handler.startNotify()
             }
         }
-        if (!handler.isStartNotified) handler.startNotify()
-    }
 
     private fun requireBinary(): String =
         binaryPathProvider() ?: throw CliException(

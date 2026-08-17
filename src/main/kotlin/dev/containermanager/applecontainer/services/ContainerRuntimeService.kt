@@ -51,7 +51,6 @@ class ContainerRuntimeService(project: Project, private val scope: CoroutineScop
 
     val cli: AppleContainerCli = AppleContainerCli(
         binaryPathProvider = { CliLocator.resolve(AppleContainerSettingsState.getInstance().cliPath) },
-        workDirectory = project.basePath,
     )
 
     private var pollingJob: kotlinx.coroutines.Job? = null

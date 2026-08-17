@@ -2,7 +2,6 @@ package dev.containermanager.applecontainer.run
 
 import com.intellij.execution.lineMarker.RunLineMarkerContributor
 import com.intellij.icons.AllIcons
-import com.intellij.openapi.actionSystem.ActionManager
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.ui.Messages
@@ -26,9 +25,8 @@ class DockerfileRunLineMarkerContributor : RunLineMarkerContributor() {
 
         return Info(
             AllIcons.Actions.Compile,
-            { "Build with Apple Container" },
-            BuildFromDockerfileAction(file.path),
-        )
+            arrayOf(BuildFromDockerfileAction(file.path)),
+        ) { "Build with Apple Container" }
     }
 
     private fun isContainerBuildFile(name: String): Boolean =

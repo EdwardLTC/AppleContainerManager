@@ -69,8 +69,6 @@ class ContainerSearchEverywhereContributor(private val project: Project) :
             }
         }
 
-    override fun getDataForItem(element: ContainerSearchItem, dataId: String): Any? = null
-
     class Factory : SearchEverywhereContributorFactory<ContainerSearchItem> {
         override fun createContributor(event: AnActionEvent): SearchEverywhereContributor<ContainerSearchItem> {
             val project = requireNotNull(event.project)

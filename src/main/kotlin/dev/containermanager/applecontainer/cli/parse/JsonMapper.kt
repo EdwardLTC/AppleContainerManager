@@ -1,16 +1,7 @@
 package dev.containermanager.applecontainer.cli.parse
 
 import dev.containermanager.applecontainer.cli.model.*
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonArray
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.longOrNull
-import kotlinx.serialization.json.contentOrNull
-import kotlinx.serialization.json.intOrNull
+import kotlinx.serialization.json.*
 
 /**
  * Maps `container ... --format json` output onto this plugin's domain models.
@@ -180,12 +171,47 @@ object JsonMapper {
     fun parseImageList(raw: String): List<ImageInfo> {
         val root = safeParseArray(raw) ?: return emptyList()
 
+        fun parseExposedPorts(variant: JsonObject): List<ExposedPort> {
+            return variant["config"]
+                ?.jsonObject
+                ?.get("history")
+                ?.jsonArray
+                ?.mapNotNull {
+                    it.jsonObject["created_by"]
+                        ?.jsonPrimitive
+                        ?.contentOrNull
+                }
+                ?.flatMap { createdBy ->
+                    Regex("""EXPOSE\s+\[([^]]+)]""").findAll(createdBy).flatMap { match ->
+                        match.groupValues[1]
+                            .split(",")
+                            .asSequence()
+                            .mapNotNull { value ->
+                                val parts = value.trim().split("/")
+
+                                val port = parts
+                                    .firstOrNull()
+                                    ?.toIntOrNull()
+                                    ?: return@mapNotNull null
+
+                                ExposedPort(
+                                    port = port,
+                                    protocol = parts.getOrElse(1) { "tcp" }
+                                )
+                            }
+                    }.toList()
+                }
+                ?.distinct()
+                ?: emptyList()
+        }
+
         return root.mapNotNull { el ->
             runCatching {
                 val obj = el.jsonObject
                 val configuration = obj["configuration"]?.jsonObject
                 val variant = obj["variants"]?.jsonArray?.firstOrNull()?.jsonObject
                 val platform = variant?.get("platform")?.jsonObject
+
                 ImageInfo(
                     reference = configuration?.get("name")?.jsonPrimitive?.contentOrNull ?: "unknown",
                     id = obj["id"]?.jsonPrimitive?.contentOrNull,
@@ -194,6 +220,7 @@ object JsonMapper {
                     sizeBytes = variant?.get("size")?.jsonPrimitive?.longOrNull,
                     os = platform?.get("os")?.jsonPrimitive?.contentOrNull,
                     architecture = platform?.get("architecture")?.jsonPrimitive?.contentOrNull,
+                    exposedPorts = parseExposedPorts(variant ?: JsonObject(emptyMap()))
                 )
             }.getOrNull()
         }

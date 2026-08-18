@@ -1,6 +1,7 @@
 package dev.containermanager.applecontainer.toolwindow.tabs
 
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.application.EDT
 import com.intellij.openapi.project.Project
 import com.intellij.ui.AnimatedIcon
@@ -41,31 +42,22 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
     private val scopeService get() = PluginScopeService.getInstance(project)
 
     private var servicesRunning = false
-    private var builderRunning = false
 
     private val servicesToggleBtn = JButton().apply {
         addActionListener { toggleServices() }
-    }
-    private val builderToggleBtn = JButton().apply {
-        addActionListener { toggleBuilder() }
     }
     private val refreshBtn = LoadingButton("Refresh Status", AllIcons.Actions.Refresh) { refreshStatus() }
     private val versionBtn = LoadingButton("Version", null) { showVersion() }
     private val dfBtn = LoadingButton("Disk Usage", null) { showDiskUsage() }
     private val logsBtn = LoadingButton("System Logs", null) { showSystemLogs() }
-    private val builderStatusBtn = LoadingButton("Builder Status", null) { showBuilderStatus() }
 
     init {
         val topRow = JPanel(FlowLayout(FlowLayout.LEFT, 6, 4)).apply {
             add(servicesToggleBtn)
-            add(refreshBtn)
             add(versionBtn)
-            add(dfBtn)
             add(logsBtn)
-        }
-        val builderRow = JPanel(FlowLayout(FlowLayout.LEFT, 6, 4)).apply {
-            add(builderToggleBtn)
-            add(builderStatusBtn)
+            add(dfBtn)
+            add(refreshBtn)
         }
         val header = JPanel(BorderLayout()).apply {
             border = JBUI.Borders.empty(6, 8, 2, 8)
@@ -76,7 +68,6 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
             add(header, BorderLayout.NORTH)
             add(JPanel(BorderLayout()).apply {
                 add(topRow, BorderLayout.NORTH)
-                add(builderRow, BorderLayout.SOUTH)
             }, BorderLayout.CENTER)
         }
 
@@ -84,7 +75,6 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
         add(JBScrollPane(outputArea), BorderLayout.CENTER)
 
         updateServicesButton()
-        updateBuilderButton()
         refreshStatus()
     }
 
@@ -98,6 +88,7 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
         }
         statusLabel.foreground = if (cliAvailable && daemonRunning) JBColor(0x59A869, 0x59A869) else JBColor.GRAY
         updateServicesButton()
+        updateAnotherButton()
     }
 
     private fun toggleServices() {
@@ -114,19 +105,6 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
         }
     }
 
-    private fun toggleBuilder() {
-        val startingUp = !builderRunning
-        setBusy(builderToggleBtn, if (startingUp) "Starting\u2026" else "Stopping\u2026")
-        runAction(
-            onDone = {
-                builderRunning = startingUp
-                updateBuilderButton()
-            },
-        ) {
-            if (startingUp) runtime.cli.builder.start() else runtime.cli.builder.stop()
-        }
-    }
-
     private fun updateServicesButton() {
         if (servicesToggleBtn.getClientProperty("busy") == true) return
         servicesToggleBtn.text = if (servicesRunning) "Stop Services" else "Start Services"
@@ -134,11 +112,10 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
         servicesToggleBtn.isEnabled = true
     }
 
-    private fun updateBuilderButton() {
-        if (builderToggleBtn.getClientProperty("busy") == true) return
-        builderToggleBtn.text = if (builderRunning) "Stop Builder" else "Start Builder"
-        builderToggleBtn.icon = if (builderRunning) AllIcons.Actions.Suspend else AllIcons.Actions.Execute
-        builderToggleBtn.isEnabled = true
+    private fun updateAnotherButton() {
+        if (dfBtn.getClientProperty("busy") == true) return
+        dfBtn.isEnabled = servicesRunning
+        refreshBtn.isEnabled = servicesRunning
     }
 
     private fun refreshStatus() {
@@ -164,8 +141,6 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
 
     private fun showSystemLogs(): Unit = logsBtn.runBusy { showRaw(runtime.cli.system.logs()) }
 
-    private fun showBuilderStatus(): Unit = builderStatusBtn.runBusy { showRaw(runtime.cli.builder.status().raw) }
-
     private suspend fun showRaw(text: String) = withContext(Dispatchers.EDT) { outputArea.text = text }
 
     private fun setBusy(button: JButton, busyText: String) {
@@ -188,11 +163,8 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
     }
 
     private fun onDoneOnEdt(onDone: () -> Unit) {
-        com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater {
-            servicesToggleBtn.putClientProperty("busy", false)
-            builderToggleBtn.putClientProperty("busy", false)
-            onDone()
-        }
+        servicesToggleBtn.putClientProperty("busy", false)
+        onDone()
     }
 
     /** A button that shows a spinner + disables itself for the duration of its suspend action. */
@@ -210,7 +182,7 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
             text = "$idleText\u2026"
             scopeService.launchIo(
                 onError = { t ->
-                    invokeOnEdt { resetToIdle() }
+                    ApplicationManager.getApplication().invokeLater { resetToIdle() }
                     AppleContainerNotifier.error(project, "Apple Container", t.message ?: "Command failed")
                 },
             ) {
@@ -225,8 +197,4 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
             text = idleText
         }
     }
-}
-
-private fun invokeOnEdt(block: () -> Unit) {
-    com.intellij.openapi.application.ApplicationManager.getApplication().invokeLater(block)
 }

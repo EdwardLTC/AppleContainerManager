@@ -81,8 +81,9 @@ class ToggleContainerAction : BaseCliAction() {
 
 class KillContainerAction : BaseCliAction() {
     override fun update(e: AnActionEvent) {
-        val selection = e.getData(AppleContainerDataKeys.SELECTED_CONTAINERS)
-        e.presentation.isEnabled = !selection.isNullOrEmpty()
+        val selection = e.getData(AppleContainerDataKeys.SELECTED_CONTAINERS) ?: emptyList()
+        val allRunning = selection.all { it.status == ContainerStatus.RUNNING }
+        e.presentation.isEnabled = selection.isNotEmpty() && allRunning
     }
 
     override fun confirmationMessage(e: AnActionEvent): String {

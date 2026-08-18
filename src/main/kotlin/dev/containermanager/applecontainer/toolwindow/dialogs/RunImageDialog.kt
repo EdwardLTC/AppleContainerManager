@@ -1,38 +1,25 @@
 package dev.containermanager.applecontainer.toolwindow.dialogs
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.ui.DialogWrapper
-import com.intellij.ui.components.JBCheckBox
-import com.intellij.ui.components.JBScrollPane
-import com.intellij.ui.components.JBTextArea
-import com.intellij.ui.components.JBTextField
-import com.intellij.ui.dsl.builder.AlignX
-import com.intellij.ui.dsl.builder.panel
-import dev.containermanager.applecontainer.cli.model.ImageInfo
-import dev.containermanager.applecontainer.cli.model.RunSpec
-import java.awt.Dimension
-import javax.swing.JComponent
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
+import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.TextBrowseFolderListener
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
-import com.intellij.ui.components.JBLabel
+import com.intellij.ui.components.*
+import com.intellij.ui.dsl.builder.AlignX
+import com.intellij.ui.dsl.builder.panel
 import com.intellij.ui.table.JBTable
+import dev.containermanager.applecontainer.cli.model.ImageInfo
 import dev.containermanager.applecontainer.cli.model.NetworkInfo
+import dev.containermanager.applecontainer.cli.model.RunSpec
 import dev.containermanager.applecontainer.cli.model.VolumeInfo
 import java.awt.BorderLayout
 import java.awt.Component
+import java.awt.Dimension
 import java.awt.FlowLayout
-import javax.swing.DefaultCellEditor
-import javax.swing.DefaultListCellRenderer
-import javax.swing.JButton
-import javax.swing.JCheckBox
-import javax.swing.JPanel
-import javax.swing.JSpinner
-import javax.swing.ListSelectionModel
-import javax.swing.SpinnerNumberModel
-import javax.swing.JList
+import javax.swing.*
 
 class RunImageDialog(
     project: Project,
@@ -42,6 +29,7 @@ class RunImageDialog(
 ) : DialogWrapper(project) {
 
     private val nameField = JBTextField().apply {
+        text = image.reference.substringAfterLast("/").substringBeforeLast(":")
         columns = 30
     }
 
@@ -97,8 +85,8 @@ class RunImageDialog(
 
     private val workdirField = TextFieldWithBrowseButton().apply {
         val descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor().apply {
-                title = "Select Working Directory"
-            }
+            title = "Select Working Directory"
+        }
 
         addBrowseFolderListener(TextBrowseFolderListener(descriptor, project))
     }
@@ -238,81 +226,81 @@ class RunImageDialog(
     private val networkComboBox = createNetworkComboBox(networks)
 
     private val networkTable = JBTable(networkTableModel).apply {
-            setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
-            rowHeight = 28
-            setShowGrid(true)
-            columnModel.getColumn(0).preferredWidth = 300
-            columnModel.getColumn(0).cellEditor = DefaultCellEditor(networkComboBox)
-        }
+        setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
+        rowHeight = 28
+        setShowGrid(true)
+        columnModel.getColumn(0).preferredWidth = 300
+        columnModel.getColumn(0).cellEditor = DefaultCellEditor(networkComboBox)
+    }
 
     private val networksPanel = JPanel(BorderLayout()).apply {
-            val scrollPane = JBScrollPane(
-                networkTable
-            ).apply {
-                preferredSize = Dimension(
-                    500,
-                    100,
-                )
-            }
-            val buttons = JPanel(
-                FlowLayout(
-                    FlowLayout.LEFT,
-                    4,
-                    4,
-                )
-            )
-
-            val addButton = JButton("Add").apply {
-                addActionListener {
-
-                    networkTableModel.addNetwork()
-
-                    val row =
-                        networkTableModel.rowCount - 1
-
-                    if (row >= 0) {
-                        networkTable
-                            .setRowSelectionInterval(
-                                row,
-                                row,
-                            )
-                    }
-                }
-            }
-
-            val removeButton = JButton("Remove").apply {
-                addActionListener {
-
-                    val selectedRow =
-                        networkTable.selectedRow
-
-                    if (selectedRow >= 0) {
-
-                        val modelRow =
-                            networkTable
-                                .convertRowIndexToModel(
-                                    selectedRow
-                                )
-
-                        networkTableModel
-                            .removeNetwork(modelRow)
-                    }
-                }
-            }
-
-            buttons.add(addButton)
-            buttons.add(removeButton)
-
-            add(
-                scrollPane,
-                BorderLayout.CENTER,
-            )
-
-            add(
-                buttons,
-                BorderLayout.SOUTH,
+        val scrollPane = JBScrollPane(
+            networkTable
+        ).apply {
+            preferredSize = Dimension(
+                500,
+                100,
             )
         }
+        val buttons = JPanel(
+            FlowLayout(
+                FlowLayout.LEFT,
+                4,
+                4,
+            )
+        )
+
+        val addButton = JButton("Add").apply {
+            addActionListener {
+
+                networkTableModel.addNetwork()
+
+                val row =
+                    networkTableModel.rowCount - 1
+
+                if (row >= 0) {
+                    networkTable
+                        .setRowSelectionInterval(
+                            row,
+                            row,
+                        )
+                }
+            }
+        }
+
+        val removeButton = JButton("Remove").apply {
+            addActionListener {
+
+                val selectedRow =
+                    networkTable.selectedRow
+
+                if (selectedRow >= 0) {
+
+                    val modelRow =
+                        networkTable
+                            .convertRowIndexToModel(
+                                selectedRow
+                            )
+
+                    networkTableModel
+                        .removeNetwork(modelRow)
+                }
+            }
+        }
+
+        buttons.add(addButton)
+        buttons.add(removeButton)
+
+        add(
+            scrollPane,
+            BorderLayout.CENTER,
+        )
+
+        add(
+            buttons,
+            BorderLayout.SOUTH,
+        )
+    }
 
     private val dnsField = JBTextArea().apply {
         rows = 2
@@ -487,18 +475,15 @@ class RunImageDialog(
             group("General") {
 
                 row("Image:") {
-                    label(image.reference)
-                        .resizableColumn()
+                    label(image.reference).resizableColumn()
                 }
 
                 row("Name:") {
-                    cell(nameField)
-                        .align(AlignX.FILL)
+                    cell(nameField).align(AlignX.FILL)
                 }
 
                 row("Arguments:") {
-                    scrollCell(argumentsField)
-                        .align(AlignX.FILL)
+                    scrollCell(argumentsField).align(AlignX.FILL)
                 }
 
                 row {
@@ -518,23 +503,19 @@ class RunImageDialog(
             group("Environment") {
 
                 row("Environment:") {
-                    scrollCell(envField)
-                        .align(AlignX.FILL)
+                    scrollCell(envField).align(AlignX.FILL)
                 }
 
                 row("Env file:") {
-                    cell(envFileField)
-                        .align(AlignX.FILL)
+                    cell(envFileField).align(AlignX.FILL)
                 }
 
                 row("Working directory:") {
-                    cell(workdirField)
-                        .align(AlignX.FILL)
+                    cell(workdirField).align(AlignX.FILL)
                 }
 
                 row("User:") {
-                    cell(userField)
-                        .align(AlignX.FILL)
+                    cell(userField).align(AlignX.FILL)
                 }
             }
 
@@ -561,8 +542,7 @@ class RunImageDialog(
                             add(JBLabel("Ports:"), BorderLayout.NORTH)
                             add(portsPanel, BorderLayout.CENTER)
                         }
-                    )
-                        .align(AlignX.FILL)
+                    ).align(AlignX.FILL)
                 }
 
                 row {
@@ -583,23 +563,19 @@ class RunImageDialog(
             group("Advanced") {
 
                 row("Labels:") {
-                    scrollCell(labelsField)
-                        .align(AlignX.FILL)
+                    scrollCell(labelsField).align(AlignX.FILL)
                 }
 
                 row("Capabilities +:") {
-                    scrollCell(capAddField)
-                        .align(AlignX.FILL)
+                    scrollCell(capAddField).align(AlignX.FILL)
                 }
 
                 row("Capabilities -:") {
-                    scrollCell(capDropField)
-                        .align(AlignX.FILL)
+                    scrollCell(capDropField).align(AlignX.FILL)
                 }
 
                 row("Entrypoint:") {
-                    cell(entrypointField)
-                        .align(AlignX.FILL)
+                    cell(entrypointField).align(AlignX.FILL)
                 }
 
                 row("Architecture:") {

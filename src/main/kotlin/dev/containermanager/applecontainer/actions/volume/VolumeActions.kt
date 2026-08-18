@@ -1,6 +1,5 @@
 package dev.containermanager.applecontainer.actions.volume
 
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -13,7 +12,7 @@ import dev.containermanager.applecontainer.services.ContainerRuntimeService
 import dev.containermanager.applecontainer.services.PluginScopeService
 import dev.containermanager.applecontainer.util.AppleContainerNotifier
 
-class CreateVolumeAction : AnAction("Create Volume\u2026", "Create a new named volume", AllIcons.General.Add) {
+class CreateVolumeAction : AnAction() {
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun actionPerformed(e: AnActionEvent) {
@@ -58,7 +57,7 @@ class PruneVolumesAction : BaseCliAction() {
     }
 }
 
-class InspectVolumeAction : AnAction("Inspect", "Show full volume metadata as JSON", AllIcons.Actions.Preview) {
+class InspectVolumeAction : AnAction() {
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun update(e: AnActionEvent) {

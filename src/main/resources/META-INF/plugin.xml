@@ -38,95 +38,126 @@
                 displayName="Apple Container Manager"/>
 
         <!-- Startup check -->
-        <postStartupActivity implementation="dev.containermanager.applecontainer.listeners.AppleContainerStartupActivity"/>
+        <postStartupActivity
+                implementation="dev.containermanager.applecontainer.listeners.AppleContainerStartupActivity"/>
 
         <!-- Run Configuration -->
         <configurationType implementation="dev.containermanager.applecontainer.run.ContainerRunConfigurationType"/>
-        <runLineMarkerContributor language="TEXT"
-                                  implementationClass="dev.containermanager.applecontainer.run.DockerfileRunLineMarkerContributor"/>
+        <runLineMarkerContributor
+                implementationClass="dev.containermanager.applecontainer.run.DockerfileRunLineMarkerContributor"
+                language=""/>
 
         <!-- Search Everywhere -->
-        <searchEverywhereContributor implementation="dev.containermanager.applecontainer.search.ContainerSearchEverywhereContributor$Factory"/>
+        <searchEverywhereContributor
+                implementation="dev.containermanager.applecontainer.search.ContainerSearchEverywhereContributor$Factory"/>
     </extensions>
 
     <actions>
         <!-- ============================ Container actions ============================ -->
         <action id="AppleContainerManager.Refresh"
                 class="dev.containermanager.applecontainer.actions.container.RefreshContainersAction"
-                text="Refresh" description="Refresh the container list" icon="AllIcons.Actions.Refresh"/>
+                text="Refresh" description="Refresh the container list"
+                icon="AllIcons.Actions.Refresh"/>
         <action id="AppleContainerManager.ToggleContainer"
                 class="dev.containermanager.applecontainer.actions.container.ToggleContainerAction"
-                text="Start" description="Start the selected container(s)" icon="AllIcons.Actions.Execute"/>
+                text="Start" description="Start the selected container(s)"
+                icon="AllIcons.Actions.Execute"/>
         <action id="AppleContainerManager.KillContainer"
                 class="dev.containermanager.applecontainer.actions.container.KillContainerAction"
-                text="Kill" description="Kill the selected container(s)" icon="AllIcons.Process.Stop"/>
+                text="Kill" description="Kill the selected container(s)"
+                icon="AllIcons.Process.Stop"/>
         <action id="AppleContainerManager.DeleteContainer"
                 class="dev.containermanager.applecontainer.actions.container.DeleteContainerAction"
-                text="Delete" description="Delete the selected container(s)" icon="AllIcons.Actions.GC"/>
+                text="Delete" description="Delete the selected container(s)"
+                icon="AllIcons.Actions.GC"/>
         <action id="AppleContainerManager.PruneContainers"
                 class="dev.containermanager.applecontainer.actions.container.PruneContainersAction"
-                text="Prune" description="Prune unused containers" icon="AllIcons.Actions.GC"/>
+                text="Prune" description="Prune unused containers"
+                icon="AllIcons.Actions.ClearCash"/>
         <action id="AppleContainerManager.ViewLogs"
                 class="dev.containermanager.applecontainer.actions.container.ViewLogsAction"
-                text="View Logs" description="View logs for the selected container(s)" icon="AllIcons.Actions.ShowAsTree"/>
+                text="View Logs" description="View logs for the selected container(s)"
+                icon="AllIcons.Actions.ShowAsTree"/>
         <action id="AppleContainerManager.ExecInContainer"
                 class="dev.containermanager.applecontainer.actions.container.ExecInContainerAction"
-                text="Exec Shell…" description="Execute a command in the selected container(s)" icon="AllIcons.Debugger.Console"/>
+                text="Exec Shell…" description="Execute a command in the selected container(s)"
+                icon="AllIcons.Debugger.Console"/>
         <action id="AppleContainerManager.ViewStats"
                 class="dev.containermanager.applecontainer.actions.container.ViewStatsAction"
-                text="View Live Stats" description= "Stream CPU / memory / network stats" icon="AllIcons.Actions.Profile"/>
+                text="View Live Stats" description="Stream CPU / memory / network stats"
+                icon="AllIcons.Actions.Profile"/>
         <action id="AppleContainerManager.InspectContainer"
                 class="dev.containermanager.applecontainer.actions.container.InspectContainerAction"
-                text="Inspect" description="Inspect the selected container" icon="AllIcons.Actions.Preview"/>
+                text="Inspect" description="Inspect the selected container"
+                icon="AllIcons.Actions.Preview"/>
 
         <!-- ============================== Image actions =============================== -->
         <action id="AppleContainerManager.PullImage"
                 class="dev.containermanager.applecontainer.actions.image.PullImageAction"
-                text="Pull Image…" description="Pull an image by reference" icon="AllIcons.Actions.Download"/>
+                text="Pull Image…" description="Pull an image by reference"
+                icon="AllIcons.Actions.Download"/>
         <action id="AppleContainerManager.BuildImage"
                 class="dev.containermanager.applecontainer.actions.image.BuildImageAction"
-                text="Build Image" description="Build an image from a Dockerfile" icon="AllIcons.Actions.Compile"/>
+                text="Build Image" description="Build an image from a Dockerfile"
+                icon="AllIcons.Actions.Compile"/>
         <action id="AppleContainerManager.RunImage"
                 class="dev.containermanager.applecontainer.actions.image.RunImageAction"
-                text="Run Image" description="Run a container from the selected image" icon="AllIcons.Actions.Execute"/>
+                text="Run Image" description="Run a container from the selected image"
+                icon="AllIcons.Actions.Execute"/>
         <action id="AppleContainerManager.PushImage"
                 class="dev.containermanager.applecontainer.actions.image.PushImageAction"
-                text="Push Image" description="Push the selected image to its registry" icon="AllIcons.Actions.Upload"/>
+                text="Push Image" description="Push the selected image to its registry"
+                icon="AllIcons.Actions.Upload"/>
         <action id="AppleContainerManager.TagImage"
                 class="dev.containermanager.applecontainer.actions.image.TagImageAction"/>
         <action id="AppleContainerManager.DeleteImage"
                 class="dev.containermanager.applecontainer.actions.image.DeleteImageAction"
-                text="Delete" description="Delete the selected image(s)" icon="AllIcons.Actions.GC"/>
+                text="Delete" description="Delete the selected image(s)"
+                icon="AllIcons.Actions.GC"/>
         <action id="AppleContainerManager.PruneImages"
                 class="dev.containermanager.applecontainer.actions.image.PruneImagesAction"
-                text="Prune Unused Images" description="Remove dangling / unused images" icon="AllIcons.Actions.GC"/>
+                text="Prune Unused Images" description="Remove dangling / unused images"
+                icon="AllIcons.Actions.ClearCash"/>
         <action id="AppleContainerManager.InspectImage"
                 class="dev.containermanager.applecontainer.actions.image.InspectImageAction"
-                text="Inspect" description="Show full image metadata as JSON" icon="AllIcons.Actions.Preview"/>
+                text="Inspect" description="Show full image metadata as JSON"
+                icon="AllIcons.Actions.Preview"/>
 
         <!-- ============================= Volume actions ================================ -->
         <action id="AppleContainerManager.CreateVolume"
-                class="dev.containermanager.applecontainer.actions.volume.CreateVolumeAction"/>
+                class="dev.containermanager.applecontainer.actions.volume.CreateVolumeAction"
+                text="Create Volume" description="Create a new named volume"
+                icon="AllIcons.General.Add"/>
         <action id="AppleContainerManager.DeleteVolume"
                 class="dev.containermanager.applecontainer.actions.volume.DeleteVolumeAction"
-                text="Delete" description="Delete the selected volume(s)" icon="AllIcons.Actions.GC"/>
+                text="Delete" description="Delete the selected volume(s)"
+                icon="AllIcons.Actions.GC"/>
         <action id="AppleContainerManager.PruneVolumes"
                 class="dev.containermanager.applecontainer.actions.volume.PruneVolumesAction"
-                text="Prune Unused Volumes" description="Remove volumes not used by any container" icon="AllIcons.Actions.GC"/>
+                text="Prune Unused Volumes" description="Remove volumes not used by any container"
+                icon="AllIcons.Actions.GC"/>
         <action id="AppleContainerManager.InspectVolume"
-                class="dev.containermanager.applecontainer.actions.volume.InspectVolumeAction"/>
+                class="dev.containermanager.applecontainer.actions.volume.InspectVolumeAction"
+                text="Inspect" description="Show full volume metadata as JSON"
+                icon="AllIcons.Actions.PreviewDetails"/>
 
         <!-- ============================ Network actions ================================ -->
         <action id="AppleContainerManager.CreateNetwork"
-                class="dev.containermanager.applecontainer.actions.network.CreateNetworkAction"/>
+                class="dev.containermanager.applecontainer.actions.network.CreateNetworkAction"
+                text="Create Network" description="Create a new network"
+                icon="AllIcons.General.Add"/>
         <action id="AppleContainerManager.DeleteNetwork"
                 class="dev.containermanager.applecontainer.actions.network.DeleteNetworkAction"
-                text="Delete" description="Delete the selected network(s)" icon="AllIcons.Actions.GC"/>
+                text="Delete" description="Delete the selected network(s)"
+                icon="AllIcons.Actions.GC"/>
         <action id="AppleContainerManager.PruneNetworks"
                 class="dev.containermanager.applecontainer.actions.network.PruneNetworksAction"
-                text="Prune Unused Networks" description="Remove networks not used by any container" icon="AllIcons.Actions.GC"/>
+                text="Prune Unused Networks" description="Remove networks not used by any container"
+                icon="AllIcons.Actions.GC"/>
         <action id="AppleContainerManager.InspectNetwork"
-                class="dev.containermanager.applecontainer.actions.network.InspectNetworkAction"/>
+                class="dev.containermanager.applecontainer.actions.network.InspectNetworkAction"
+                text="Inspect" description="Show full network metadata as JSON"
+                icon="AllIcons.Actions.PreviewDetails"/>
 
         <!-- ================================ Toolbars ==================================== -->
         <group id="AppleContainerManager.ContainersToolbar">

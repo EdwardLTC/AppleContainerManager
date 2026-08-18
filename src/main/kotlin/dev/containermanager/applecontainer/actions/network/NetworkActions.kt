@@ -1,6 +1,5 @@
 package dev.containermanager.applecontainer.actions.network
 
-import com.intellij.icons.AllIcons
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -13,7 +12,7 @@ import dev.containermanager.applecontainer.services.ContainerRuntimeService
 import dev.containermanager.applecontainer.services.PluginScopeService
 import dev.containermanager.applecontainer.util.AppleContainerNotifier
 
-class CreateNetworkAction : AnAction("Create Network\u2026", "Create a new network", AllIcons.General.Add) {
+class CreateNetworkAction : AnAction() {
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun actionPerformed(e: AnActionEvent) {
@@ -56,7 +55,7 @@ class PruneNetworksAction : BaseCliAction() {
     }
 }
 
-class InspectNetworkAction : AnAction("Inspect", "Show full network metadata as JSON", AllIcons.Actions.Preview) {
+class InspectNetworkAction : AnAction() {
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun update(e: AnActionEvent) {

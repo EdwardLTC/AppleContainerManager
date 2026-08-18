@@ -31,8 +31,8 @@ class DockerfileRunLineMarkerContributor : RunLineMarkerContributor() {
 
     private fun isContainerBuildFile(name: String): Boolean =
         name == "Dockerfile" || name == "Containerfile" ||
-            name.endsWith(".dockerfile", ignoreCase = true) ||
-            name.startsWith("Dockerfile.")
+                name.endsWith(".dockerfile", ignoreCase = true) ||
+                name.startsWith("Dockerfile.")
 }
 
 private class BuildFromDockerfileAction(private val dockerfilePath: String) :

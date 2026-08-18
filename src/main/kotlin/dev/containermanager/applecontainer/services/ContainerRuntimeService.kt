@@ -40,7 +40,7 @@ data class RuntimeSnapshot(
  * consumers (Swing panels) collect the flow and marshal updates to the EDT themselves.
  */
 @Service(Service.Level.PROJECT)
-class ContainerRuntimeService(project: Project, private val scope: CoroutineScope) {
+class ContainerRuntimeService(private val scope: CoroutineScope) {
 
     private val logger = thisLogger()
     private val refreshMutex = Mutex()
@@ -78,6 +78,8 @@ class ContainerRuntimeService(project: Project, private val scope: CoroutineScop
     fun resetSnapshot() {
         _snapshot.value = RuntimeSnapshot()
     }
+
+    fun isServicesRunning(): Boolean = _snapshot.value.daemonRunning
 
     private suspend fun refresh() {
         // Avoid overlapping refreshes if a manual refresh races the poller.

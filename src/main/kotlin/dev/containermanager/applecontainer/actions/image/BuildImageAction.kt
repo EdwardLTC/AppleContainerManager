@@ -13,6 +13,11 @@ import dev.containermanager.applecontainer.services.ContainerRuntimeService
 import dev.containermanager.applecontainer.util.ConsoleRunner
 
 class BuildImageAction : AnAction() {
+    override fun update(event: AnActionEvent) {
+        event.presentation.isEnabled =
+            ContainerRuntimeService.getInstance(event.project ?: return).isServicesRunning()
+    }
+    
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun actionPerformed(e: AnActionEvent) {

@@ -8,7 +8,6 @@ import com.intellij.openapi.ui.Messages
 import dev.containermanager.applecontainer.actions.AppleContainerDataKeys
 import dev.containermanager.applecontainer.actions.BaseCliAction
 import dev.containermanager.applecontainer.actions.container.openJsonPreview
-import dev.containermanager.applecontainer.cli.model.RunSpec
 import dev.containermanager.applecontainer.services.ContainerRuntimeService
 import dev.containermanager.applecontainer.services.PluginScopeService
 import dev.containermanager.applecontainer.toolwindow.dialogs.RunImageDialog
@@ -17,6 +16,11 @@ import dev.containermanager.applecontainer.util.ConsoleRunner
 
 class PullImageAction : AnAction() {
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
+
+    override fun update(event: AnActionEvent) {
+        event.presentation.isEnabled =
+            ContainerRuntimeService.getInstance(event.project ?: return).isServicesRunning()
+    }
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
@@ -93,6 +97,11 @@ class DeleteImageAction : BaseCliAction() {
 }
 
 class PruneImagesAction : BaseCliAction() {
+    override fun update(event: AnActionEvent) {
+        event.presentation.isEnabled =
+            ContainerRuntimeService.getInstance(event.project ?: return).isServicesRunning()
+    }
+
     override fun confirmationMessage(e: AnActionEvent): String = "Remove all unused images?"
     override suspend fun performCli(project: Project, e: AnActionEvent) {
         ContainerRuntimeService.getInstance(project).cli.images.prune()

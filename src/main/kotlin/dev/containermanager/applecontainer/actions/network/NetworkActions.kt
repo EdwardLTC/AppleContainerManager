@@ -13,6 +13,11 @@ import dev.containermanager.applecontainer.services.PluginScopeService
 import dev.containermanager.applecontainer.util.AppleContainerNotifier
 
 class CreateNetworkAction : AnAction() {
+    override fun update(event: AnActionEvent) {
+        event.presentation.isEnabled =
+            ContainerRuntimeService.getInstance(event.project ?: return).isServicesRunning()
+    }
+
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun actionPerformed(e: AnActionEvent) {
@@ -49,6 +54,11 @@ class DeleteNetworkAction : BaseCliAction() {
 }
 
 class PruneNetworksAction : BaseCliAction() {
+    override fun update(event: AnActionEvent) {
+        event.presentation.isEnabled =
+            ContainerRuntimeService.getInstance(event.project ?: return).isServicesRunning()
+    }
+
     override fun confirmationMessage(e: AnActionEvent): String = "Remove all unused networks?"
     override suspend fun performCli(project: Project, e: AnActionEvent) {
         ContainerRuntimeService.getInstance(project).cli.networks.prune()

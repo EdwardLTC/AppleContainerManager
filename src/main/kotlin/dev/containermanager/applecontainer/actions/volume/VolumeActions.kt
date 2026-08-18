@@ -13,6 +13,11 @@ import dev.containermanager.applecontainer.services.PluginScopeService
 import dev.containermanager.applecontainer.util.AppleContainerNotifier
 
 class CreateVolumeAction : AnAction() {
+    override fun update(event: AnActionEvent) {
+        event.presentation.isEnabled =
+            ContainerRuntimeService.getInstance(event.project ?: return).isServicesRunning()
+    }
+    
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
     override fun actionPerformed(e: AnActionEvent) {
@@ -49,6 +54,11 @@ class DeleteVolumeAction : BaseCliAction() {
 }
 
 class PruneVolumesAction : BaseCliAction() {
+    override fun update(event: AnActionEvent) {
+        event.presentation.isEnabled =
+            ContainerRuntimeService.getInstance(event.project ?: return).isServicesRunning()
+    }
+
     override fun confirmationMessage(e: AnActionEvent): String =
         "Remove all volumes not referenced by any container? Data will be permanently lost."
 

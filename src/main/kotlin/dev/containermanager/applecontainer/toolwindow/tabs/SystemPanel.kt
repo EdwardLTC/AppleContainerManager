@@ -101,7 +101,12 @@ class SystemPanel(private val project: Project) : JPanel(BorderLayout()) {
                 refreshStatus()
             },
         ) {
-            if (startingUp) runtime.cli.system.start() else runtime.cli.system.stop()
+            if (startingUp) {
+                runtime.cli.system.start()
+            } else {
+                runtime.cli.system.stop()
+                ContainerRuntimeService.getInstance(project).resetSnapshot()
+            }
         }
     }
 

@@ -12,7 +12,6 @@ import dev.containermanager.applecontainer.cli.model.VolumeInfo
 import dev.containermanager.applecontainer.settings.AppleContainerSettingsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -72,12 +71,12 @@ class ContainerRuntimeService(project: Project, private val scope: CoroutineScop
         }
     }
 
-    fun stopPolling() {
-        pollingJob?.cancel()
-    }
-
     fun requestRefresh() {
         scope.launch(Dispatchers.IO) { refresh() }
+    }
+
+    fun resetSnapshot() {
+        _snapshot.value = RuntimeSnapshot()
     }
 
     private suspend fun refresh() {

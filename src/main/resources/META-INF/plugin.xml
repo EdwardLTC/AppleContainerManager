@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>dev.containermanager.applecontainer</id>
     <name>Apple Container Manager</name>
-    <vendor url="https://github.com/apple/container">Apple Container Manager Contributors</vendor>
+    <vendor url="https://github.com/EdwardLTC/AppleContainerManager">Edward</vendor>
 
     <description><![CDATA[
         <p>A native IntelliJ IDEA experience for managing <a href="https://github.com/apple/container">Apple's <code>container</code></a> runtime

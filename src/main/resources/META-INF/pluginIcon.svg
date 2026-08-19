@@ -1,12 +1,35 @@
-<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M32.0845 7.94025V4H24.0203V7.9896H16.029V4H7.91553V7.94025H4V36H16.0044V32.0045C16.0058 30.9457 16.4274 29.9308 17.1766 29.1826C17.9258 28.4345 18.9412 28.0143 20 28.0143C21.0588 28.0143 22.0743 28.4345 22.8234 29.1826C23.5726 29.9308 23.9942 30.9457 23.9956 32.0045V36H36V7.94025H32.0845Z"
-          fill="url(#paint0_linear)"/>
+<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="40" height="40" rx="8" fill="#F5F5F7"/>
+
+    <!-- Shipping container body -->
+    <rect x="7" y="13" width="26" height="18" rx="2.5" fill="#5A5C63"/>
+    <rect x="7" y="13" width="26" height="18" rx="2.5" fill="url(#containerGradient)"/>
+
+    <!-- Corrugation lines (container ridges) -->
+    <line x1="11.5" y1="13" x2="11.5" y2="31" stroke="#40424A" stroke-width="1"/>
+    <line x1="16" y1="13" x2="16" y2="31" stroke="#40424A" stroke-width="1"/>
+    <line x1="20.5" y1="13" x2="20.5" y2="31" stroke="#40424A" stroke-width="1"/>
+    <line x1="25" y1="13" x2="25" y2="31" stroke="#40424A" stroke-width="1"/>
+    <line x1="29.5" y1="13" x2="29.5" y2="31" stroke="#40424A" stroke-width="1"/>
+
+    <!-- Container door seam -->
+    <rect x="7" y="21" width="26" height="1" fill="#33353B" opacity="0.6"/>
+
+    <!-- Door handle / lock detail -->
+    <rect x="18.5" y="24.5" width="3" height="4" rx="1" fill="#D8D9DC"/>
+
+    <!-- Leaf / sprout accent evoking "Apple" ecosystem, growing from the container -->
+    <g>
+        <path d="M20 13 C20 9.5 22.2 7.4 25.3 6.8 C25.3 10 23.4 12.3 20 13 Z" fill="#3ECF6E"/>
+        <path d="M20 13 C20 10.2 18.2 8.4 15.6 7.9 C15.6 10.8 17.2 12.6 20 13 Z" fill="#2FB85A"/>
+        <path d="M20 13 L20 8.2" stroke="#1F8A44" stroke-width="0.8" stroke-linecap="round"/>
+    </g>
+
     <defs>
-        <linearGradient id="paint0_linear" x1="2.94192" y1="4.89955" x2="37.7772" y2="39.7345"
-                        gradientUnits="userSpaceOnUse">
-            <stop offset="0.15937" stop-color="#3BEA62"/>
-            <stop offset="0.5404" stop-color="#3C99CC"/>
-            <stop offset="0.93739" stop-color="#6B57FF"/>
+        <linearGradient id="containerGradient" x1="7" y1="13" x2="33" y2="31" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#6B6D75"/>
+            <stop offset="1" stop-color="#4A4C53"/>
         </linearGradient>
     </defs>
 </svg>

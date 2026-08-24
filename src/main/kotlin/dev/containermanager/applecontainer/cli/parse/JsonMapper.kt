@@ -98,14 +98,9 @@ object JsonMapper {
                     null
                 } else {
                     PortMapping(
-                        hostIp = port["hostIp"]
-                            ?.jsonPrimitive
-                            ?.contentOrNull,
-
+                        hostIp = port["hostIp"]?.jsonPrimitive?.contentOrNull,
                         hostPort = hostPort,
-
                         containerPort = containerPort,
-
                         protocol = port["protocol"]
                             ?.jsonPrimitive
                             ?.contentOrNull
@@ -120,45 +115,35 @@ object JsonMapper {
             name = labels["name"] ?: id,
             image = image,
             status = ContainerStatus.parse(statusRaw),
-
             createdAt = config
                 ?.get("creationDate")
                 ?.jsonPrimitive
                 ?.contentOrNull,
-
             command = initProcess
                 ?.get("arguments")
                 ?.jsonArray
                 ?.mapNotNull { it.jsonPrimitive.contentOrNull }
                 ?: emptyList(),
-
             cpus = resources
                 ?.get("cpus")
                 ?.jsonPrimitive
                 ?.intOrNull,
-
             memory = resources
                 ?.get("memoryInBytes")
                 ?.jsonPrimitive
                 ?.longOrNull
                 ?.let(::humanBytes),
-
             ports = ports,
-
             networks = networks,
-
             labels = labels,
-
             arch = platform
                 ?.get("architecture")
                 ?.jsonPrimitive
                 ?.contentOrNull,
-
             os = platform
                 ?.get("os")
                 ?.jsonPrimitive
                 ?.contentOrNull,
-
             platform = platform
                 ?.get("architecture")
                 ?.jsonPrimitive
@@ -182,12 +167,12 @@ object JsonMapper {
                         ?.contentOrNull
                 }
                 ?.flatMap { createdBy ->
-                    Regex("""EXPOSE\s+\[([^]]+)]""").findAll(createdBy).flatMap { match ->
+                    Regex("""EXPOSE\s+(?:map)?\[([^]]+)]""").findAll(createdBy).flatMap { match ->
                         match.groupValues[1]
                             .split(",")
                             .asSequence()
                             .mapNotNull { value ->
-                                val parts = value.trim().split("/")
+                                val parts = value.trim().replace("\\/", "/").split("/")
 
                                 val port = parts
                                     .firstOrNull()
@@ -196,7 +181,7 @@ object JsonMapper {
 
                                 ExposedPort(
                                     port = port,
-                                    protocol = parts.getOrElse(1) { "tcp" }
+                                    protocol = parts.getOrElse(1) { "tcp" }.substringBefore(":")
                                 )
                             }
                     }.toList()

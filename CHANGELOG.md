@@ -1,5 +1,7 @@
 # Changelog
 
+## Unreleased
+
 ## 0.1.0
 
 ### Breaking Changes
@@ -29,5 +31,3 @@
 ### Added
 
 - Initial release.
-
-## [Unreleased]

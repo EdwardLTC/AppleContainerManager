@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.3
+
+### Fix
+
+- Runline marker on Dockerfile are not executed properly.
+
 ## 0.0.2
 
 ### Added

@@ -35,7 +35,8 @@ class DockerfileRunLineMarkerContributor : RunLineMarkerContributor() {
                 name.startsWith("Dockerfile.")
 }
 
-private class BuildFromDockerfileAction(private val dockerfilePath: String) : AnAction() {
+private class BuildFromDockerfileAction(private val dockerfilePath: String) :
+    AnAction("Build with Apple Container", "Build an image from this Dockerfile", AllIcons.Actions.Compile) {
 
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return

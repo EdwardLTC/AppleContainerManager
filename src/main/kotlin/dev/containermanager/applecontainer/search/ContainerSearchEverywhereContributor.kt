@@ -54,7 +54,7 @@ class ContainerSearchEverywhereContributor(private val project: Project) :
     }
 
     override fun processSelectedItem(selected: ContainerSearchItem, modifiers: Int, searchText: String): Boolean {
-        ToolWindowManager.getInstance(project).getToolWindow("Apple Container")?.activate(null)
+        ToolWindowManager.getInstance(project).getToolWindow("Services")?.activate(null)
         return true
     }
 

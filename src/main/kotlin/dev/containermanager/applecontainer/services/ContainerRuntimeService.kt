@@ -1,5 +1,6 @@
 package dev.containermanager.applecontainer.services
 
+import com.intellij.execution.services.ServiceEventListener
 import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
@@ -9,6 +10,7 @@ import dev.containermanager.applecontainer.cli.model.ContainerInfo
 import dev.containermanager.applecontainer.cli.model.ImageInfo
 import dev.containermanager.applecontainer.cli.model.NetworkInfo
 import dev.containermanager.applecontainer.cli.model.VolumeInfo
+import dev.containermanager.applecontainer.services.view.AppleContainerServiceViewContributor
 import dev.containermanager.applecontainer.settings.AppleContainerSettingsState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +23,7 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration.Companion.milliseconds
 
-/** Snapshot of everything the tool window renders, refreshed together to keep tabs consistent. */
+/** Snapshot of everything the Services view renders, refreshed together to keep nodes consistent. */
 data class RuntimeSnapshot(
     val containers: List<ContainerInfo> = emptyList(),
     val images: List<ImageInfo> = emptyList(),
@@ -35,12 +37,12 @@ data class RuntimeSnapshot(
 
 /**
  * Central project service: owns the single [AppleContainerCli] instance for this project,
- * polls it on a background coroutine, and publishes a [RuntimeSnapshot] the tool window and
- * any other UI subscribes to via [StateFlow]. Nothing here ever touches the EDT directly \u2014
+ * polls it on a background coroutine, and publishes a [RuntimeSnapshot] the Services view and
+ * any other UI subscribes to via [StateFlow]. Nothing here ever touches the EDT directly —
  * consumers (Swing panels) collect the flow and marshal updates to the EDT themselves.
  */
 @Service(Service.Level.PROJECT)
-class ContainerRuntimeService(private val scope: CoroutineScope) {
+class ContainerRuntimeService(private val project: Project, private val scope: CoroutineScope) {
 
     private val logger = thisLogger()
     private val refreshMutex = Mutex()
@@ -130,11 +132,18 @@ class ContainerRuntimeService(private val scope: CoroutineScope) {
                     lastError = null,
                     isRefreshing = false,
                 )
+                notifyServicesViewChanged()
             } catch (t: Throwable) {
                 logger.warn("Runtime refresh failed", t)
                 _snapshot.value = _snapshot.value.copy(isRefreshing = false, lastError = t.message)
             }
         }
+    }
+
+    /** Tells the "Apple Container" node in the Services view to re-query and redraw its tree. */
+    private fun notifyServicesViewChanged() {
+        project.messageBus.syncPublisher(ServiceEventListener.TOPIC)
+            .handle(ServiceEventListener.ServiceEvent.createResetEvent(AppleContainerServiceViewContributor::class.java))
     }
 
     companion object {

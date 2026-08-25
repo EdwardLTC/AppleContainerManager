@@ -21,11 +21,9 @@
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Tool Window -->
-        <toolWindow id="Apple Container"
-                    anchor="bottom"
-                    factoryClass="dev.containermanager.applecontainer.toolwindow.ContainerToolWindowFactory"
-                    icon="AllIcons.Nodes.Artifact"/>
+        <!-- Services view: replaces the standalone Tool Window -->
+        <serviceViewContributor
+                implementation="dev.containermanager.applecontainer.services.view.AppleContainerServiceViewContributor"/>
 
         <!-- Notifications -->
         <notificationGroup id="Apple Container Manager" displayType="BALLOON"/>
@@ -43,10 +41,11 @@
 
         <!-- Run Configuration -->
         <configurationType implementation="dev.containermanager.applecontainer.run.ContainerRunConfigurationType"/>
+        
         <runLineMarkerContributor
                 implementationClass="dev.containermanager.applecontainer.run.DockerfileRunLineMarkerContributor"
                 language=""/>
-        
+
         <runLineMarkerContributor
                 implementationClass="dev.containermanager.applecontainer.run.ComposeFileRunLineMarkerContributor"
                 language=""/>

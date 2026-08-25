@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.0
+
+### Breaking Changes
+
+- Move ToolWindow into `Service Contributor`
+
 ## 0.0.3
 
 ### Fix

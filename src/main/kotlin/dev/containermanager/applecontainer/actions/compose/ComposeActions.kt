@@ -76,24 +76,25 @@ internal fun runCompose(
     action: suspend (ComposeOrchestrator, ComposeFile, (String) -> Unit) -> Unit,
 ) {
     val handler = VirtualProcessHandler()
-    ConsoleRunner.runInConsole(project, handler, title)
-
     var job: Job? = null
     handler.onStopRequested = { job?.cancel() }
 
-    job = PluginScopeService.getInstance(project).launchIo(
-        onError = { t ->
-            val message = if (t is ComposeException) t.message ?: "Compose failed" else (t.message ?: "Compose failed")
-            handler.printlnError(message)
-            handler.finish(1)
-            AppleContainerNotifier.error(project, "Apple Container Compose", message)
-        },
-    ) {
-        val compose = ComposeParser.parse(File(file.path))
-        val orchestrator = ComposeOrchestrator(ContainerRuntimeService.getInstance(project).cli, projectSlug(file))
-        action(orchestrator, compose) { line -> handler.println(line) }
-        handler.println("\nDone.")
-        handler.finish(0)
-        ContainerRuntimeService.getInstance(project).requestRefresh()
-    }
+    ConsoleRunner.runInConsole(project, handler, title, onAttached = {
+        job = PluginScopeService.getInstance(project).launchIo(
+            onError = { t ->
+                val message =
+                    if (t is ComposeException) t.message ?: "Compose failed" else (t.message ?: "Compose failed")
+                handler.printlnError(message)
+                handler.finish(1)
+                AppleContainerNotifier.error(project, "Apple Container Compose", message)
+            },
+        ) {
+            val compose = ComposeParser.parse(File(file.path))
+            val orchestrator = ComposeOrchestrator(ContainerRuntimeService.getInstance(project).cli, projectSlug(file))
+            action(orchestrator, compose) { line -> handler.println(line) }
+            handler.println("\nDone.")
+            handler.finish(0)
+            ContainerRuntimeService.getInstance(project).requestRefresh()
+        }
+    })
 }

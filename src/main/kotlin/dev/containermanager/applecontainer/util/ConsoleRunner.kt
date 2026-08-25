@@ -15,7 +15,13 @@ import com.intellij.openapi.project.Project
  */
 object ConsoleRunner {
 
-    fun runInConsole(project: Project, handler: ProcessHandler, title: String, onTerminate: (() -> Unit)? = null) {
+    fun runInConsole(
+        project: Project,
+        handler: ProcessHandler,
+        title: String,
+        onTerminate: (() -> Unit)? = null,
+        onAttached: (() -> Unit)? = null,
+    ) {
         ApplicationManager.getApplication().invokeLater {
             val executor = RunContentExecutor(project, handler)
                 .withTitle(title)
@@ -33,6 +39,7 @@ object ConsoleRunner {
             }
 
             executor.run()
+            onAttached?.invoke()
         }
     }
 }

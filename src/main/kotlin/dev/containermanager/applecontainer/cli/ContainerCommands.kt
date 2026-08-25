@@ -126,6 +126,11 @@ class ContainerCommands(private val executor: CliExecutor) {
         return executor.createStreamingHandler(args)
     }
 
+    suspend fun runDetachedAndAwait(spec: RunSpec): String {
+        val result = executor.execOrThrow(ArgBuilders.runArgs(spec.copy(detach = true)), timeoutMs = 120_000)
+        return result.stdout.trim()
+    }
+
     suspend fun copy(source: String, destination: String) {
         executor.execOrThrow(listOf("copy", source, destination))
     }

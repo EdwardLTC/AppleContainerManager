@@ -46,6 +46,10 @@
         <runLineMarkerContributor
                 implementationClass="dev.containermanager.applecontainer.run.DockerfileRunLineMarkerContributor"
                 language=""/>
+        
+        <runLineMarkerContributor
+                implementationClass="dev.containermanager.applecontainer.run.ComposeFileRunLineMarkerContributor"
+                language=""/>
 
         <!-- Search Everywhere -->
         <searchEverywhereContributor
@@ -158,6 +162,22 @@
                 class="dev.containermanager.applecontainer.actions.network.InspectNetworkAction"
                 text="Inspect" description="Show full network metadata as JSON"
                 icon="AllIcons.Actions.PreviewDetails"/>
+
+        <!-- ============================= Compose actions ================================ -->
+        <action id="AppleContainerManager.ComposeUp"
+                class="dev.containermanager.applecontainer.actions.compose.ComposeUpAction"
+                text="Apple Container: Up" description="Build and start every service in this Compose file">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="first"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="AppleContainerManager.ComposeDown"
+                class="dev.containermanager.applecontainer.actions.compose.ComposeDownAction"
+                text="Apple Container: Down" description="Stop and remove every service in this Compose file">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after"
+                          relative-to-action="AppleContainerManager.ComposeUp"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="after"
+                          relative-to-action="AppleContainerManager.ComposeUp"/>
+        </action>
 
         <!-- ================================ Toolbars ==================================== -->
         <group id="AppleContainerManager.ContainersToolbar">

@@ -17,7 +17,12 @@ class VolumeCommands(private val executor: CliExecutor) {
     suspend fun inspect(names: List<String>): String =
         executor.execOrThrow(listOf("volume", "inspect") + names).stdout
 
-    suspend fun create(name: String, sizeBytes: String? = null, labels: List<String> = emptyList(), opts: List<String> = emptyList()) {
+    suspend fun create(
+        name: String,
+        sizeBytes: String? = null,
+        labels: List<String> = emptyList(),
+        opts: List<String> = emptyList()
+    ) {
         val args = buildList {
             addAll(listOf("volume", "create"))
             sizeBytes?.let { addAll(listOf("-s", it)) }
@@ -101,7 +106,7 @@ class RegistryCommands(private val executor: CliExecutor) {
     suspend fun list(): List<RegistryLoginInfo> {
         val result = executor.execOrThrow(listOf("registry", "list", "--format", "json"))
         val root = runCatching { JsonMapper.json.parseToJsonElement(result.stdout) }.getOrNull() ?: return emptyList()
-        return emptyList() // Schema not documented; surfaced via raw output in the UI instead.
+        return emptyList() // Schema isn't documented; surfaced via raw output in the UI instead.
     }
 }
 

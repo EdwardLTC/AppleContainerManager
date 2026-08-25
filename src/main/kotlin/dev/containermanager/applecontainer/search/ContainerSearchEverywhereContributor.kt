@@ -6,14 +6,17 @@ import com.intellij.ide.actions.searcheverywhere.SearchEverywhereContributorFact
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindowManager
+import com.intellij.ui.components.JBLabel
 import com.intellij.util.Processor
 import dev.containermanager.applecontainer.services.ContainerRuntimeService
 import javax.swing.JList
 import javax.swing.ListCellRenderer
+import javax.swing.SwingConstants
 
 sealed class ContainerSearchItem(open val label: String, open val subtitle: String) {
     data class ContainerItem(override val label: String, override val subtitle: String) :
         ContainerSearchItem(label, subtitle)
+
     data class ImageItem(override val label: String, override val subtitle: String) :
         ContainerSearchItem(label, subtitle)
 }
@@ -61,7 +64,7 @@ class ContainerSearchEverywhereContributor(private val project: Project) :
                 is ContainerSearchItem.ContainerItem -> AllIcons.RunConfigurations.Application
                 is ContainerSearchItem.ImageItem -> AllIcons.Actions.Download
             }
-            com.intellij.ui.components.JBLabel("${value.label}  \u2014  ${value.subtitle}", icon, javax.swing.SwingConstants.LEFT).apply {
+            JBLabel("${value.label}  \u2014  ${value.subtitle}", icon, SwingConstants.LEFT).apply {
                 isOpaque = true
                 background = if (isSelected) list.selectionBackground else list.background
                 foreground = if (isSelected) list.selectionForeground else list.foreground

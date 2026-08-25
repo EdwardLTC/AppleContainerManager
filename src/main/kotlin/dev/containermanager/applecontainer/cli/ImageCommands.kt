@@ -1,6 +1,8 @@
 package dev.containermanager.applecontainer.cli
 
 import com.intellij.execution.process.OSProcessHandler
+import com.intellij.execution.process.ProcessEvent
+import com.intellij.execution.process.ProcessListener
 import dev.containermanager.applecontainer.cli.model.BuildSpec
 import dev.containermanager.applecontainer.cli.model.ImageInfo
 import dev.containermanager.applecontainer.cli.parse.JsonMapper
@@ -84,4 +86,17 @@ class ImageCommands(private val executor: CliExecutor) {
         }
         return executor.execOrThrow(args).stdout
     }
+
+    suspend fun buildAndAwait(spec: BuildSpec, onOutputLine: ((String) -> Unit)? = null): Int {
+        val handler = buildStreaming(spec)
+        if (onOutputLine != null) {
+            handler.addProcessListener(object : ProcessListener {
+                override fun onTextAvailable(event: ProcessEvent, outputType: com.intellij.openapi.util.Key<*>) {
+                    onOutputLine(event.text)
+                }
+            })
+        }
+        return executor.awaitCompletion(handler)
+    }
+
 }

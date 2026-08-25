@@ -12,11 +12,9 @@ import dev.containermanager.applecontainer.services.ContainerRuntimeService
 class RefreshContainersAction : BaseCliAction() {
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
     override suspend fun performCli(project: Project, e: AnActionEvent) {
-        // requestRefresh() below (called by the base class after performCli) does the work;
-        // nothing additional to invoke here.
+        ContainerRuntimeService.getInstance(project).requestRefresh()
     }
 }
-
 
 class ToggleContainerAction : BaseCliAction() {
 

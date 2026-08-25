@@ -4,6 +4,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.project.Project
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 @Service(Service.Level.PROJECT)
 class PluginScopeService(private val scope: CoroutineScope) {
 
-    fun launchIo(onError: ((Throwable) -> Unit)? = null, block: suspend () -> Unit) {
+    fun launchIo(onError: ((Throwable) -> Unit)? = null, block: suspend () -> Unit): Job =
         scope.launch(Dispatchers.IO) {
             try {
                 block()
@@ -22,7 +23,6 @@ class PluginScopeService(private val scope: CoroutineScope) {
                 onError?.invoke(t)
             }
         }
-    }
 
     companion object {
         fun getInstance(project: Project): PluginScopeService =

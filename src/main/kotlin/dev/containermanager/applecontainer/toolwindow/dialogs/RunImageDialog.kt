@@ -1,7 +1,6 @@
 package dev.containermanager.applecontainer.toolwindow.dialogs
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
-import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
@@ -83,12 +82,8 @@ class RunImageDialog(
         )
     }
 
-    private val workdirField = TextFieldWithBrowseButton().apply {
-        val descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor().apply {
-            title = "Select Working Directory"
-        }
-
-        addBrowseFolderListener(TextBrowseFolderListener(descriptor, project))
+    private val workdirField = JBTextField().apply {
+        columns = 30
     }
 
     private val userField = JBTextField().apply {

@@ -1,11 +1,6 @@
 package dev.containermanager.applecontainer.toolwindow.tabs
 
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.ActionPlaces
-import com.intellij.openapi.actionSystem.DataSink
-import com.intellij.openapi.actionSystem.DefaultActionGroup
-import com.intellij.openapi.actionSystem.PlatformDataKeys
-import com.intellij.openapi.actionSystem.UiDataProvider
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.Project
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.table.JBTable
@@ -20,17 +15,16 @@ class VolumesPanel(private val project: Project) : JPanel(BorderLayout()), UiDat
 
     private val tableModel = VolumeTableModelFactory.createModel()
     val table: JBTable = VolumeTableModelFactory.createTable(tableModel)
+    var toolBar: ActionToolbar = ActionManager.getInstance().createActionToolbar(
+        ActionPlaces.TOOLWINDOW_CONTENT,
+        ActionManager.getInstance().getAction("AppleContainerManager.VolumesToolbar") as DefaultActionGroup,
+        true,
+    ).apply { targetComponent = this@VolumesPanel }
 
     init {
-        val toolbar = ActionManager.getInstance().createActionToolbar(
-            ActionPlaces.TOOLWINDOW_CONTENT,
-            ActionManager.getInstance().getAction("AppleContainerManager.VolumesToolbar") as DefaultActionGroup,
-            true,
-        ).apply { targetComponent = this@VolumesPanel }
-
         val header = JPanel(BorderLayout()).apply {
             border = JBUI.Borders.empty(2)
-            add(toolbar.component, BorderLayout.WEST)
+            add(toolBar.component, BorderLayout.WEST)
         }
 
         add(header, BorderLayout.NORTH)

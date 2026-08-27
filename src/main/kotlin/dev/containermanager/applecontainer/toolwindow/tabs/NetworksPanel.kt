@@ -1,12 +1,6 @@
 package dev.containermanager.applecontainer.toolwindow.tabs
 
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.ActionPlaces
-import com.intellij.openapi.actionSystem.DataProvider
-import com.intellij.openapi.actionSystem.DataSink
-import com.intellij.openapi.actionSystem.DefaultActionGroup
-import com.intellij.openapi.actionSystem.PlatformDataKeys
-import com.intellij.openapi.actionSystem.UiDataProvider
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.Project
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.table.JBTable
@@ -22,12 +16,13 @@ class NetworksPanel(private val project: Project) : JPanel(BorderLayout()), UiDa
     private val tableModel = NetworkTableModelFactory.createModel()
     val table: JBTable = NetworkTableModelFactory.createTable(tableModel)
 
+    val toolbar = ActionManager.getInstance().createActionToolbar(
+        ActionPlaces.TOOLWINDOW_CONTENT,
+        ActionManager.getInstance().getAction("AppleContainerManager.NetworksToolbar") as DefaultActionGroup,
+        true,
+    ).apply { targetComponent = this@NetworksPanel }
+
     init {
-        val toolbar = ActionManager.getInstance().createActionToolbar(
-            ActionPlaces.TOOLWINDOW_CONTENT,
-            ActionManager.getInstance().getAction("AppleContainerManager.NetworksToolbar") as DefaultActionGroup,
-            true,
-        ).apply { targetComponent = this@NetworksPanel }
 
         val header = JPanel(BorderLayout()).apply {
             border = JBUI.Borders.empty(2)
@@ -39,7 +34,7 @@ class NetworksPanel(private val project: Project) : JPanel(BorderLayout()), UiDa
     }
 
     fun update(networks: List<NetworkInfo>) {
-       if (tableModel.items == networks) return
+        if (tableModel.items == networks) return
 
         tableModel.items = networks
     }

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+### Changed
+
+- WorkingDir now will be free text input instead of a picker.
+
 ## 0.1.0
 
 ### Breaking Changes

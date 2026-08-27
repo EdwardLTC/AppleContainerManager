@@ -41,7 +41,7 @@
 
         <!-- Run Configuration -->
         <configurationType implementation="dev.containermanager.applecontainer.run.ContainerRunConfigurationType"/>
-        
+
         <runLineMarkerContributor
                 implementationClass="dev.containermanager.applecontainer.run.DockerfileRunLineMarkerContributor"
                 language=""/>
@@ -196,6 +196,7 @@
 
         <group id="AppleContainerManager.ImagesToolbar">
             <reference ref="AppleContainerManager.Refresh"/>
+            <separator/>
             <reference ref="AppleContainerManager.PullImage"/>
             <reference ref="AppleContainerManager.BuildImage"/>
             <separator/>
@@ -210,6 +211,7 @@
 
         <group id="AppleContainerManager.VolumesToolbar">
             <reference ref="AppleContainerManager.Refresh"/>
+            <separator/>
             <reference ref="AppleContainerManager.CreateVolume"/>
             <reference ref="AppleContainerManager.DeleteVolume"/>
             <separator/>
@@ -219,6 +221,7 @@
 
         <group id="AppleContainerManager.NetworksToolbar">
             <reference ref="AppleContainerManager.Refresh"/>
+            <separator/>
             <reference ref="AppleContainerManager.CreateNetwork"/>
             <reference ref="AppleContainerManager.DeleteNetwork"/>
             <separator/>

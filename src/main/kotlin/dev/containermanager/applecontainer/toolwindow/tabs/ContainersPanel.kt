@@ -1,11 +1,6 @@
 package dev.containermanager.applecontainer.toolwindow.tabs
 
-import com.intellij.openapi.actionSystem.ActionManager
-import com.intellij.openapi.actionSystem.ActionPlaces
-import com.intellij.openapi.actionSystem.DataSink
-import com.intellij.openapi.actionSystem.DefaultActionGroup
-import com.intellij.openapi.actionSystem.PlatformDataKeys
-import com.intellij.openapi.actionSystem.UiDataProvider
+import com.intellij.openapi.actionSystem.*
 import com.intellij.openapi.project.Project
 import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.SearchTextField
@@ -26,14 +21,13 @@ class ContainersPanel(private val project: Project) : JPanel(BorderLayout()), Ui
     val table: JBTable = ContainerTableModelFactory.createTable(tableModel)
     private val searchField = SearchTextField()
     private var allContainers: List<ContainerInfo> = emptyList()
-
+    val toolbar = ActionManager.getInstance().createActionToolbar(
+        ActionPlaces.TOOLWINDOW_CONTENT,
+        ActionManager.getInstance().getAction("AppleContainerManager.ContainersToolbar") as DefaultActionGroup,
+        true,
+    ).apply { targetComponent = this@ContainersPanel }
+    
     init {
-        val toolbar = ActionManager.getInstance().createActionToolbar(
-            ActionPlaces.TOOLWINDOW_CONTENT,
-            ActionManager.getInstance().getAction("AppleContainerManager.ContainersToolbar") as DefaultActionGroup,
-            true,
-        ).apply { targetComponent = this@ContainersPanel }
-
         val header = JPanel(BorderLayout()).apply {
             border = JBUI.Borders.empty(2)
             add(toolbar.component, BorderLayout.WEST)
@@ -55,6 +49,7 @@ class ContainersPanel(private val project: Project) : JPanel(BorderLayout()), Ui
 
         allContainers = containers
         applyFilter()
+        toolbar.updateActionsAsync()
     }
 
     private fun applyFilter() {

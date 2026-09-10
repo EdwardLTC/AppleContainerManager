@@ -77,6 +77,10 @@ class ContainerRuntimeService(private val project: Project, private val scope: C
         scope.launch(Dispatchers.IO) { refresh() }
     }
 
+    suspend fun refreshNow() {
+        refresh()
+    }
+
     fun resetSnapshot() {
         _snapshot.value = RuntimeSnapshot()
     }
@@ -84,7 +88,6 @@ class ContainerRuntimeService(private val project: Project, private val scope: C
     fun isServicesRunning(): Boolean = _snapshot.value.daemonRunning
 
     private suspend fun refresh() {
-        // Avoid overlapping refreshes if a manual refresh races the poller.
         if (refreshMutex.isLocked) return
         refreshMutex.withLock {
             _snapshot.value = _snapshot.value.copy(isRefreshing = true)

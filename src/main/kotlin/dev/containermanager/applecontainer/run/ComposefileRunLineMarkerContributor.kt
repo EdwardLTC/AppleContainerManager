@@ -8,7 +8,9 @@ import com.intellij.psi.PsiElement
 import dev.containermanager.applecontainer.actions.compose.COMPOSE_FILE_NAMES
 import dev.containermanager.applecontainer.actions.compose.composeFileFrom
 import dev.containermanager.applecontainer.actions.compose.runCompose
+import jdk.jfr.Experimental
 
+@Experimental
 class ComposeFileRunLineMarkerContributor : RunLineMarkerContributor() {
     override fun getInfo(element: PsiElement): Info? {
         if (element.textOffset != 0) return null

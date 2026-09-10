@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.1.2
+
+### Changed
+
+- Replaced Containers, Images, Networks, and Volumes IDE action toolbars with native controls that update immediately
+  with selection and runtime state.
+- Grouped tool-window panel and toolbar sources by tab, and extracted shared toolbar execution, loading, and JSON
+  preview components.
+- Removed obsolete action registrations and implementations are now replaced by native toolbars.
+- Optimize parseExposedPorts
+
 ## 0.1.1
 
 ### Changed

@@ -5,7 +5,11 @@ import com.intellij.openapi.application.EDT
 import com.intellij.openapi.project.Project
 import com.intellij.ui.components.JBTabbedPane
 import dev.containermanager.applecontainer.services.ContainerRuntimeService
-import dev.containermanager.applecontainer.toolwindow.tabs.*
+import dev.containermanager.applecontainer.toolwindow.tabs.containers.ContainersPanel
+import dev.containermanager.applecontainer.toolwindow.tabs.images.ImagesPanel
+import dev.containermanager.applecontainer.toolwindow.tabs.networks.NetworksPanel
+import dev.containermanager.applecontainer.toolwindow.tabs.system.SystemPanel
+import dev.containermanager.applecontainer.toolwindow.tabs.volumes.VolumesPanel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 import java.awt.BorderLayout
@@ -16,7 +20,7 @@ import javax.swing.JPanel
  * [ContainerRuntimeService.snapshot]. Subscription runs on a scope tied to this panel's
  * disposal, so the flow collector goes away with the tool window content.
  */
-class ContainerManagerPanel(private val project: Project) : JPanel(BorderLayout()), Disposable {
+class ContainerManagerPanel(project: Project) : JPanel(BorderLayout()), Disposable {
 
     private val uiScope = CoroutineScope(SupervisorJob() + Dispatchers.EDT)
 

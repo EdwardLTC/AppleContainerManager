@@ -167,9 +167,11 @@ object JsonMapper {
                         ?.contentOrNull
                 }
                 ?.flatMap { createdBy ->
-                    Regex("""EXPOSE\s+(?:map)?\[([^]]+)]""").findAll(createdBy).flatMap { match ->
-                        match.groupValues[1]
-                            .split(",")
+                    val regex = Regex("""EXPOSE\s+(?:(?:map)?\[([^]]+)]|(\d+(?:/\w+)?))""")
+                    regex.findAll(createdBy).flatMap { match ->
+                        val raw = match.groupValues[1].ifEmpty { match.groupValues[2] }
+
+                        raw.split(",")
                             .asSequence()
                             .mapNotNull { value ->
                                 val parts = value.trim().replace("\\/", "/").split("/")

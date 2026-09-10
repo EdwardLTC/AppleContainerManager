@@ -1,5 +1,7 @@
 # Changelog
 
+## Unreleased
+
 ## 0.1.2
 
 ### Changed
@@ -46,5 +48,3 @@
 ### Added
 
 - Initial release.
-
-## [Unreleased]

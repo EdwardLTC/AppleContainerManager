@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.3
+
+### Changed
+
+- Reworked Compose Up with project-scoped networks and volumes, `.env` interpolation, dependency ordering, safe
+  reconciliation, and rollback on partial failure.
+- Compose projects now use labels and configuration fingerprints to preserve unchanged running services and recreate
+  changed services safely.
+- Added Apple Container DNS-domain detection with actionable guidance when service-name discovery has not been
+  configured.
+
+### Fixed
+
+- Table container isn’t present in the list
+
 ## Unreleased
 
 ## 0.1.2

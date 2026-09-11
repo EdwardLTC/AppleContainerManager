@@ -5,7 +5,6 @@ import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.table.JBTable
 import com.intellij.util.ui.JBUI
 import dev.containermanager.applecontainer.cli.model.ContainerInfo
-import dev.containermanager.applecontainer.toolwindow.table.ContainerTableModelFactory
 import java.awt.BorderLayout
 import javax.swing.JPanel
 
@@ -14,7 +13,6 @@ class ContainersPanel(project: Project) : JPanel(BorderLayout()) {
 
     private val tableModel = ContainerTableModelFactory.createModel()
     val table: JBTable = ContainerTableModelFactory.createTable(tableModel)
-    private var allContainers: List<ContainerInfo> = emptyList()
     private val toolbar = ContainersToolbar(project, ::selectedContainers)
 
     init {
@@ -32,9 +30,7 @@ class ContainersPanel(project: Project) : JPanel(BorderLayout()) {
     }
 
     fun update(containers: List<ContainerInfo>) {
-        if (allContainers == containers) return
-
-        allContainers = containers
+        if (tableModel.items != containers) tableModel.items = containers
         toolbar.updateButtons()
     }
 

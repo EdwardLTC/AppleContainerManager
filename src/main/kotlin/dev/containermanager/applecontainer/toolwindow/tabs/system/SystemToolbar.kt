@@ -13,7 +13,7 @@ import javax.swing.JPanel
 
 /** Native controls for starting services and querying the Apple Container system. */
 class SystemToolbar(
-    private val project: Project,
+    project: Project,
     private val onStatus: (running: Boolean, raw: String) -> Unit,
     private val onOutput: (String) -> Unit,
 ) : JPanel(FlowLayout(FlowLayout.LEFT, 6, 2)) {
@@ -25,7 +25,8 @@ class SystemToolbar(
     private val versionButton = JButton("Version").apply { addActionListener { showVersion() } }
     private val logsButton = JButton("System Logs").apply { addActionListener { showSystemLogs() } }
     private val diskUsageButton = JButton("Disk Usage").apply { addActionListener { showDiskUsage() } }
-    private val refreshButton = JButton("Refresh Status", AllIcons.Actions.Refresh).apply { addActionListener { refreshStatus() } }
+    private val refreshButton =
+        JButton("Refresh Status", AllIcons.Actions.Refresh).apply { addActionListener { refreshStatus() } }
 
     init {
         listOf(servicesToggleButton, versionButton, logsButton, diskUsageButton, refreshButton).forEach(::add)

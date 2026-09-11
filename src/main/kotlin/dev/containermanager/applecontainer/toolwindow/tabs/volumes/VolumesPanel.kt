@@ -5,7 +5,6 @@ import com.intellij.ui.ScrollPaneFactory
 import com.intellij.ui.table.JBTable
 import com.intellij.util.ui.JBUI
 import dev.containermanager.applecontainer.cli.model.VolumeInfo
-import dev.containermanager.applecontainer.toolwindow.table.VolumeTableModelFactory
 import java.awt.BorderLayout
 import javax.swing.JPanel
 

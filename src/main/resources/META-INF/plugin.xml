@@ -49,10 +49,6 @@
         <runLineMarkerContributor
                 implementationClass="dev.containermanager.applecontainer.run.ComposeFileRunLineMarkerContributor"
                 language=""/>
-
-        <!-- Search Everywhere -->
-        <searchEverywhereContributor
-                implementation="dev.containermanager.applecontainer.search.ContainerSearchEverywhereContributor$Factory"/>
     </extensions>
 
     <actions>

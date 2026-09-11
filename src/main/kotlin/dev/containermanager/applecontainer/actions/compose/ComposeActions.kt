@@ -32,10 +32,6 @@ internal fun composeFileFrom(e: AnActionEvent): VirtualFile? {
     return file.takeIf { it.name in COMPOSE_FILE_NAMES }
 }
 
-/** Slug used to namespace built image tags and container names, mirroring `docker compose`'s own convention. */
-private fun projectSlug(composeFile: VirtualFile): String =
-    (composeFile.parent?.name ?: "compose").lowercase().replace(Regex("[^a-z0-9_-]"), "-")
-
 class ComposeUpAction : AnAction() {
     override fun getActionUpdateThread() = ActionUpdateThread.BGT
 
@@ -90,7 +86,7 @@ internal fun runCompose(
             },
         ) {
             val compose = ComposeParser.parse(File(file.path))
-            val orchestrator = ComposeOrchestrator(ContainerRuntimeService.getInstance(project).cli, projectSlug(file))
+            val orchestrator = ComposeOrchestrator(ContainerRuntimeService.getInstance(project).cli)
             action(orchestrator, compose) { line -> handler.println(line) }
             handler.println("\nDone.")
             handler.finish(0)

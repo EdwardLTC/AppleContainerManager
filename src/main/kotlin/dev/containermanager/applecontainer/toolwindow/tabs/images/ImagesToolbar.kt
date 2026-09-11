@@ -162,7 +162,7 @@ class ImagesToolbar(private val project: Project, private val selectedImages: ()
         if (confirm("Remove all unused images?")) taskRunner.run(
             pruneButton,
             onFinished = ::updateButtons
-        ) { runtime.cli.images.prune() }
+        ) { runtime.cli.images.prune(true) }
     }
 
     private fun confirm(message: String): Boolean =

@@ -1,6 +1,7 @@
-package dev.containermanager.applecontainer.toolwindow.table
+package dev.containermanager.applecontainer.toolwindow.tabs.containers
 
 import com.intellij.ui.ColoredTableCellRenderer
+import com.intellij.ui.JBColor
 import com.intellij.ui.SimpleTextAttributes
 import com.intellij.ui.table.JBTable
 import com.intellij.util.ui.ColumnInfo
@@ -28,8 +29,9 @@ private object StatusCellRenderer : ColoredTableCellRenderer() {
         val status = (value as? String)?.let { runCatching { ContainerStatus.valueOf(it) }.getOrNull() }
         val (text, attrs) = when (status) {
             ContainerStatus.RUNNING -> "\u25CF Running" to SimpleTextAttributes.REGULAR_ATTRIBUTES.derive(
-                SimpleTextAttributes.STYLE_BOLD, java.awt.Color(0x59, 0xA8, 0x69), null, null,
+                SimpleTextAttributes.STYLE_BOLD, JBColor(0x59A869, 0x59A869), null, null,
             )
+
             ContainerStatus.STOPPED, ContainerStatus.EXITED -> "\u25CB Stopped" to SimpleTextAttributes.GRAYED_ATTRIBUTES
             ContainerStatus.CREATED -> "\u25D0 Created" to SimpleTextAttributes.GRAY_ATTRIBUTES
             else -> "? Unknown" to SimpleTextAttributes.GRAY_ATTRIBUTES

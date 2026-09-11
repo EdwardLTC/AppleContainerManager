@@ -3,17 +3,6 @@ package dev.containermanager.applecontainer.cli.parse
 import dev.containermanager.applecontainer.cli.model.*
 import kotlinx.serialization.json.*
 
-/**
- * Maps `container ... --format json` output onto this plugin's domain models.
- *
- * IMPORTANT: Apple's `container` CLI does not publish a formal JSON schema in the command
- * reference (only `system version` documents its exact shape). The field names used below
- * follow the CLI's own vocabulary (`configuration`, `status`, `initProcess`, `resources`,
- * `platform`, ...) as observed from the tool's Swift source layout, but are intentionally
- * parsed *leniently*: every accessor here tolerates missing/renamed fields and falls back to
- * sane defaults rather than throwing, and unknown keys are ignored. If a future CLI release
- * changes field names, update this file only \u2014 nothing above the CLI layer needs to change.
- */
 object JsonMapper {
 
     val json = Json {

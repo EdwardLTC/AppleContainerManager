@@ -25,6 +25,8 @@ data class RunSpec(
     val mounts: List<String> = emptyList(),
     val networks: List<String> = emptyList(),
     val dnsServers: List<String> = emptyList(),
+    val dnsDomain: String? = null,
+    val dnsSearch: String? = null,
     val labels: List<String> = emptyList(),
     val capAdd: List<String> = emptyList(),
     val capDrop: List<String> = emptyList(),

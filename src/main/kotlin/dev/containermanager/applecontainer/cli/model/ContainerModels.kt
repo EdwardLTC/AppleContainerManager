@@ -3,14 +3,7 @@ package dev.containermanager.applecontainer.cli.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/**
- * Domain-level representation of a container, decoupled from the raw CLI JSON shape.
- *
- * The `container` CLI's `--format json` output is mapped onto this type inside
- * [dev.containermanager.applecontainer.cli.parse.ContainerJsonMapper] so that everything above the
- * CLI layer (services, UI, run configurations) works with a stable model even if the
- * upstream JSON schema shifts between `container` releases.
- */
+
 data class ContainerInfo(
     val id: String,
     val name: String?,
@@ -57,6 +50,7 @@ data class PortMapping(
 data class ContainerStats(
     val id: String,
     val cpuPercent: Double?,
+    val cpuUsageUsec: Long?,
     val memoryUsageBytes: Long?,
     val memoryLimitBytes: Long?,
     val networkRxBytes: Long?,

@@ -37,6 +37,8 @@ object ArgBuilders {
         spec.mounts.forEach { addAll(listOf("--mount", it)) }
         spec.networks.forEach { addAll(listOf("--network", it)) }
         spec.dnsServers.forEach { addAll(listOf("--dns", it)) }
+        spec.dnsDomain?.let { addAll(listOf("--dns-domain", it)) }
+        spec.dnsSearch?.let { addAll(listOf("--dns-search", it)) }
         spec.labels.forEach { addAll(listOf("--label", it)) }
         spec.capAdd.forEach { addAll(listOf("--cap-add", it)) }
         spec.capDrop.forEach { addAll(listOf("--cap-drop", it)) }

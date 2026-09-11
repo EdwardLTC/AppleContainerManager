@@ -1,5 +1,7 @@
 # Changelog
 
+## Unreleased
+
 ## 0.1.3
 
 ### Changed
@@ -14,8 +16,6 @@
 ### Fixed
 
 - Table container isn’t present in the list
-
-## Unreleased
 
 ## 0.1.2
 

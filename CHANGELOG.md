@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## 0.1.4
+
+### Changed
+
+- Replaced the deprecated `FileEditorManager.openFile(file, focusEditor)` call in the JSON preview with
+  `OpenFileDescriptor`, removing the deprecated API usage reported by the Plugin Verifier.
+
 ## 0.1.3
 
 ### Changed
